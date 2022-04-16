@@ -28,7 +28,7 @@ public class Planet {
         double TwoPlanetDistance=Math.sqrt((this.xxPos-p.xxPos)*(this.xxPos-p.xxPos)+(this.yyPos-p.yyPos)*(this.yyPos-p.yyPos));
         return TwoPlanetDistance;
     }
-    double G=6.67e-11;
+    private double G=6.67e-11;
     public double calcForceExertedBy (Planet p)
     {
         double calcForceExertedBy=G*this.mass*p.mass/(this.calcDistance(p)*this.calcDistance(p));
