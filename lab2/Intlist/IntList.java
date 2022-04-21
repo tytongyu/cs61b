@@ -97,6 +97,8 @@ public class IntList {
 
     public static IntList dcatenate(IntList A, IntList B) {
         IntList current=A;
+        if (current==null)
+            return B;
         while (current.rest!=null)
         {
             current=current.rest;
@@ -110,6 +112,8 @@ public class IntList {
      * * elements of B.  May NOT modify items of A.  Use 'new'.
      */
     public static IntList catenate(IntList A, IntList B) {
+        if (A==null)
+            return B;
         IntList CatenateResult=new IntList(A.first,null);
         IntList CurrentA=A;
         IntList CurrentResult=CatenateResult;
@@ -142,18 +146,15 @@ public class IntList {
             System.out.print(A.first);
         }
         System.out.println(" ");
-    }
-*/
+    }*/
+
     /*@author TY
     test dcatenate and catenate
     public static void main(String[] args) {
-        IntList a =of(3,4,5,6,7);
+        IntList a =null;
         IntList b=of(3,4,5,6);
-        IntList c =of(3,4,5,6,7);
-        IntList d=of(3,4,5,6,7,8);
-        a.equals(b);
-        a.equals(c);
-        a.equals(d);
+        display(dcatenate(a, b));
+        display(catenate(a, b));
     }*/
 
 
