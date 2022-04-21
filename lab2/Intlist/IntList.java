@@ -25,6 +25,21 @@ public class IntList {
         rest = rest0;
     }
 
+    /* @author TY
+    copy constructor
+    public IntList(IntList p)
+    {
+        IntList PCurrent =p;
+        IntList ThisCurrent=this;
+        this.first =PCurrent.first;
+        while(PCurrent.rest !=null)
+        {
+            PCurrent=PCurrent.rest;
+            ThisCurrent.rest=new IntList(PCurrent.first,null);
+            ThisCurrent=ThisCurrent.rest;
+        }
+    }*/
+
     /**
      * A List with null rest, and first = 0.
      */
@@ -81,8 +96,13 @@ public class IntList {
      */
 
     public static IntList dcatenate(IntList A, IntList B) {
-        //TODO:  fill in method
-        return null;
+        IntList current=A;
+        while (current.rest!=null)
+        {
+            current=current.rest;
+        }
+        current.rest=B;
+        return A;
     }
 
     /**
@@ -90,20 +110,51 @@ public class IntList {
      * * elements of B.  May NOT modify items of A.  Use 'new'.
      */
     public static IntList catenate(IntList A, IntList B) {
-        //TODO:  fill in method
-        return null;
+        IntList CatenateResult=new IntList(A.first,null);
+        IntList CurrentA=A;
+        IntList CurrentResult=CatenateResult;
+        while(CurrentA.rest!=null)
+        {
+            CurrentA=CurrentA.rest;
+            CurrentResult.rest=new IntList(CurrentA.first, null);
+            CurrentResult=CurrentResult.rest;
+        }
+        CurrentA=B;
+        CurrentResult.rest=new IntList(B.first,null);
+        CurrentResult=CurrentResult.rest;
+        while(CurrentA.rest!=null)
+        {
+            CurrentA=CurrentA.rest;
+            CurrentResult.rest=new IntList(CurrentA.first, null);
+            CurrentResult=CurrentResult.rest;
+        }
+        return CatenateResult;
     }
 
-
-
-
-
-
-
-
-
-
-
+    /* @author TY
+    display each element in A
+    public static void display (IntList A)
+    {
+        System.out.print(A.first);
+        while (A.rest!=null)
+        {
+            A=A.rest;
+            System.out.print(A.first);
+        }
+        System.out.println(" ");
+    }
+*/
+    /*@author TY
+    test dcatenate and catenate
+    public static void main(String[] args) {
+        IntList a =of(3,4,5,6,7);
+        IntList b=of(3,4,5,6);
+        IntList c =of(3,4,5,6,7);
+        IntList d=of(3,4,5,6,7,8);
+        a.equals(b);
+        a.equals(c);
+        a.equals(d);
+    }*/
 
 
 
