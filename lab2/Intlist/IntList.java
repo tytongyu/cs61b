@@ -124,6 +124,8 @@ public class IntList {
             CurrentResult=CurrentResult.rest;
         }
         CurrentA=B;
+        if (B==null)
+            return CatenateResult;
         CurrentResult.rest=new IntList(B.first,null);
         CurrentResult=CurrentResult.rest;
         while(CurrentA.rest!=null)
