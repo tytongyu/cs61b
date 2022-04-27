@@ -13,31 +13,27 @@ public class ArrayDeque<T> {
             T[] a = (T[]) new Object[capacity * 2];
             if (nextright > left) {
                 System.arraycopy(items, left, a, 0, nextright - left);
-            }
-            else {
-                System.arraycopy(items, left, a, 0, capacity-left);
-                System.arraycopy(items,0, a, capacity-left, nextright);
+            } else {
+                System.arraycopy(items, left, a, 0, capacity - left);
+                System.arraycopy(items, 0, a, capacity - left, nextright);
             }
             items = a;
             nextright = (nextright - left + capacity) % capacity;
             left = 0;
             capacity = capacity * 2;
-        }
-        else if (capacity > 15 && (nextright - left + capacity) % capacity < 0.25 * capacity) {
+        } else if (capacity > 15 && (nextright - left + capacity) % capacity < 0.25 * capacity) {
             T[] a = (T []) new Object[capacity / 2];
             if (nextright > left) {
                 System.arraycopy(items, left, a, 0, nextright - left);
-            }
-            else {
-                System.arraycopy(items, left, a, 0, capacity-left);
-                System.arraycopy(items,0, a, capacity-left, nextright);
+            } else {
+                System.arraycopy(items, left, a, 0, capacity - left);
+                System.arraycopy(items, 0, a, capacity - left, nextright);
             }
             items = a;
             nextright = (nextright - left + capacity) % capacity;
             left = 0;
             capacity = capacity / 2;
-        }
-        else {
+        } else {
             return;
         }
     }
@@ -45,7 +41,7 @@ public class ArrayDeque<T> {
     /* Adds an item of type T to the front of the deque.*/
     public void addFirst(T item) {
         this.resize();
-        left = (left + capacity -1) % capacity;
+        left = (left + capacity - 1) % capacity;
         items[left] = item;
     }
 
@@ -53,7 +49,7 @@ public class ArrayDeque<T> {
     public void addLast(T item) {
         this.resize();
         items[nextright] = item;
-        nextright = (nextright + capacity +1) % capacity;
+        nextright = (nextright + capacity + 1) % capacity;
     }
 
     /* Returns true if deque is empty, false otherwise.*/
@@ -95,7 +91,7 @@ public class ArrayDeque<T> {
         }
         this.resize();
         T a = items[left];
-        left=(left + 1 + capacity) % capacity;
+        left = (left + 1 + capacity) % capacity;
         return a;
     }
 
@@ -106,13 +102,13 @@ public class ArrayDeque<T> {
         }
         this.resize();
         T a = items[(nextright - 1 + capacity) % capacity];
-        nextright=(nextright - 1 + capacity) % capacity;
+        nextright = (nextright - 1 + capacity) % capacity;
         return a;
     }
 
     /* Gets the item at the given index, where 0 is the front, 1 is the next item, and so forth. If no such item exists, returns null. Must not alter the deque!*/
     public T get(int index) {
-        if (this.isEmpty() || index+1 > size()) {
+        if (this.isEmpty() || index + 1 > size()) {
             return null;
         }
         return items[(index + left) % capacity];

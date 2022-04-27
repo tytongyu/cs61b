@@ -3,26 +3,25 @@ public class LinkedListDeque<T> {
     private StuffNode sentinel;
 
     private class StuffNode {
-        public StuffNode next;
-        public StuffNode prev;
-        public T item;
+        private StuffNode next;
+        private StuffNode prev;
+        private T item;
 
         public StuffNode(T x, StuffNode m, StuffNode n) {
-            item=x;
-            prev=m;
-            next=n;
+            item = x;
+            prev = m;
+            next = n;
         }
 
-        public T getRecursiveInNode(int index){
+        public T getRecursiveInNode(int index) {
             while (this.next == null || this.next == sentinel) {
                 return null;
             }
-            StuffNode Current = this;
+            StuffNode current = this;
             if (index == 0) {
-                return Current.next.item;
-            }
-            else {
-                return Current.next.getRecursiveInNode(index-1);
+                return current.next.item;
+            } else {
+                return current.next.getRecursiveInNode(index - 1);
             }
         }
     }
@@ -79,15 +78,16 @@ public class LinkedListDeque<T> {
             System.out.println("Empty Deque");
             return;
         }
-        StuffNode Current = sentinel;
-        while (Current.next != sentinel) {
-            System.out.print(Current.next.item);
-            Current = Current.next;
+        StuffNode current = sentinel;
+        while (current.next != sentinel) {
+            System.out.print(current.next.item);
+            current = current.next;
         }
         System.out.println(" ");
     }
 
-    /* Removes and returns the item at the front of the deque. If no such item exists, returns null.*/
+    /* Removes and returns the item at the front of the deque.
+    If no such item exists, returns null.*/
     public T removeFirst() {
         while (this.isEmpty()) {
             return null;
@@ -101,7 +101,8 @@ public class LinkedListDeque<T> {
         return first.item;
     }
 
-    /* Removes and returns the item at the back of the deque. If no such item exists, returns null.*/
+    /* Removes and returns the item at the back of the deque.
+    If no such item exists, returns null.*/
     public T removeLast() {
         while (this.isEmpty()) {
             return null;
@@ -115,17 +116,18 @@ public class LinkedListDeque<T> {
         return last.item;
     }
 
-    /* Gets the item at the given index, where 0 is the front, 1 is the next item, and so forth. If no such item exists, returns null. Must not alter the deque!*/
+    /* Gets the item at the given index, where 0 is the front, 1 is the next item,
+    and so forth. If no such item exists, returns null. Must not alter the deque!*/
     public T get(int index) {
         while (this.isEmpty() || size <= index) {
             return null;
         }
-        StuffNode Current = sentinel.next;
+        StuffNode current = sentinel.next;
         while (index != 0) {
-            Current = Current.next;
+            current = current.next;
             index -= 1;
         }
-        return Current.item;
+        return current.item;
     }
 
     public T getRecursive(int index) {
