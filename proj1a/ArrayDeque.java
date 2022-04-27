@@ -1,33 +1,50 @@
 public class ArrayDeque<T> {
     private T[] items;
-    private int size;
-
-    public ArrayDeque (T x)
-    {
-        items =(T []) new Object[8];
-        items[0] = x;
-        size=1;
-    }
+    private int capacity = 8;
+    private int left;
+    private int nextright;
 
     public ArrayDeque ()
     {
-        items =(T []) new Object[8];
-        size=0;
+        items = (T[]) new Object[capacity];
+        left = nextright = 0;
     }
 
-    public void resize ()
+    private void resize ()
     {
-        if (size > 0.5*items.length)
+        if ((nextright - left + capacity)%capacity +1 == capacity)
         {
-            T[] a =(T []) new Object[size=size*2];
-            System.arraycopy(items,0,a,0,size);
+            T[] a = (T []) new Object[capacity * 2];
+            if (nextright > left)
+            {
+                System.arraycopy(items,left,a,0,nextright - left);
+            }
+            else
+            {
+                System.arraycopy(items,left,a,0,capacity-left);
+                System.arraycopy(items,0,a,capacity-left,nextright);
+            }
             items = a;
+            nextright = (nextright - left + capacity)%capacity;
+            left = 0;
+            capacity = capacity * 2;
         }
-        else if (size >15 && size<0.25*items.length)
+        else if (capacity >15 && (nextright - left + capacity)%capacity<0.25*capacity)
         {
-            T[] a =(T []) new Object[size=size*2];
-            System.arraycopy(items,0,a,0,size);
+            T[] a = (T []) new Object[capacity / 2];
+            if (nextright > left)
+            {
+                System.arraycopy(items,left,a,0,nextright - left);
+            }
+            else
+            {
+                System.arraycopy(items,left,a,0,capacity-left);
+                System.arraycopy(items,0,a,capacity-left,nextright);
+            }
             items = a;
+            nextright = (nextright - left + capacity)%capacity;
+            left = 0;
+            capacity = capacity / 2;
         }
         else {
             return;
@@ -37,36 +54,26 @@ public class ArrayDeque<T> {
     /* Adds an item of type T to the front of the deque.*/
     public void addFirst(T item){
         this.resize();
-        size+=1;
-        T[] a =(T []) new Object[items.length];
-        a[0] = item;
-        System.arraycopy(items,0,a,1,size-1);
-        items = a;
+        left = (left + capacity -1)%capacity;
+        items[left] = item;
     }
 
 
     /* Adds an item of type T to the back of the deque.*/
     public void addLast(T item) {
         this.resize();
-        size+=1;
-        T[] a =(T []) new Object[items.length];
-        System.arraycopy(items,0,a,0,size-1);
-        a[size-1] = item;
-        items = a;
+        items[nextright] = item;
+        nextright = (nextright + capacity +1)%capacity;
     }
 
     /* Returns true if deque is empty, false otherwise.*/
     public boolean isEmpty() {
-        while (size == 0)
-        {
-            return true;
-        }
-        return false;
+        return left == nextright;
     }
 
     /* Returns the number of items in the deque.*/
     public int size() {
-        return size;
+        return (nextright - left + capacity)%capacity;
     }
 
     /* Prints the items in the deque from first to last, separated by a space.*/
@@ -75,8 +82,23 @@ public class ArrayDeque<T> {
             System.out.println("Empty Deque");
             return;
         }
-        for (int i = 0; i<size; i++){
-            System.out.print(items[i]);
+        if (left < nextright)
+        {
+            for (int i = left;i < nextright;i++)
+            {
+                System.out.print(items[i]);
+            }
+        }
+        if (left > nextright)
+        {
+            for (int i = left;i < capacity;i++)
+            {
+                System.out.print(items[i]);
+            }
+            for (int i = 0;i < nextright;i++)
+            {
+                System.out.print(items[i]);
+            }
         }
         System.out.println(" ");
     }
@@ -87,12 +109,9 @@ public class ArrayDeque<T> {
             return null;
         }
         this.resize();
-        size-=1;
-        T[] a =(T []) new Object[items.length];
-        T b = items[0];
-        System.arraycopy(items,1,a,0,size);
-        items = a;
-        return b;
+        T a = items[left];
+        left=(left+1+capacity)%capacity;
+        return a;
     }
 
     /* Removes and returns the item at the back of the deque. If no such item exists, returns null.*/
@@ -101,27 +120,28 @@ public class ArrayDeque<T> {
             return null;
         }
         this.resize();
-        size-=1;
-        T[] a =(T []) new Object[items.length];
-        T b = items[size];
-        System.arraycopy(items,0,a,0,size);
-        items = a;
-        return b;
+        T a = items[(nextright-1+capacity)%capacity];
+        nextright=(nextright-1+capacity)%capacity;
+        return a;
     }
 
     /* Gets the item at the given index, where 0 is the front, 1 is the next item, and so forth. If no such item exists, returns null. Must not alter the deque!*/
     public T get(int index){
-        while (this.isEmpty()){
+        if (this.isEmpty() || index+1 > size()){
             return null;
         }
-        return items[index];
+        return items[(index+left)%capacity];
+
     }
 
+
     public static void main(String[] args) {
-        ArrayDeque<Integer> a = new ArrayDeque<>(1);
+        ArrayDeque<Integer> a = new ArrayDeque<>();
         a.printDeque();
         a.addFirst(0);
         a.printDeque();
+        a.addLast(2);
+        a.addLast(3);
         a.addLast(2);
         a.addLast(3);
         a.printDeque();
@@ -135,5 +155,4 @@ public class ArrayDeque<T> {
         System.out.println(a.get(3));
         System.out.println(b.get(0));
     }
-
 }

@@ -7,7 +7,7 @@ public class LinkedListDeque<T>{
         public StuffNode prev;
         public T item;
 
-        public StuffNode(T x,StuffNode m,StuffNode n){
+        public StuffNode(T x , StuffNode m , StuffNode n){
             item=x;
             prev=m;
             next=n;
@@ -29,24 +29,26 @@ public class LinkedListDeque<T>{
         }
     }
 
-    public LinkedListDeque(T x){
-        size=1;
+    /*public LinkedListDeque(T x){
+        size = 1;
         sentinel = new StuffNode(x,null,null);
         StuffNode add = new StuffNode(x,null,null);
         sentinel.next=add;
         add.next=sentinel;
         sentinel.prev=add;
         add.prev=sentinel;
-    }
+    }*/
 
     public LinkedListDeque(){
-        size=0;
+        size = 0;
         sentinel = new StuffNode(null,null,null);
+        sentinel.prev = sentinel;
+        sentinel.next = sentinel;
     }
 
     /* Adds an item of type T to the front of the deque.*/
     public void addFirst(T item){
-        size+=1;
+        size += 1;
         StuffNode first = sentinel.next;
         StuffNode add = new StuffNode(item,sentinel,first);
         sentinel.next = add;
@@ -56,7 +58,7 @@ public class LinkedListDeque<T>{
 
     /* Adds an item of type T to the back of the deque.*/
     public void addLast(T item) {
-        size+=1;
+        size += 1;
         StuffNode last = sentinel.prev;
         StuffNode add = new StuffNode(item,last,sentinel);
         last.next = add;
@@ -129,8 +131,8 @@ public class LinkedListDeque<T>{
             {
                 return null;
             }
-            Current=Current.next;
-            index-=1;
+            Current = Current.next;
+            index -= 1;
         }
         return Current.item;
     }
@@ -139,7 +141,7 @@ public class LinkedListDeque<T>{
         return sentinel.getRecursiveInNode(index);
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         LinkedListDeque<Integer> a = new LinkedListDeque<>(1);
         a.addLast(2);
         a.addLast(3);
@@ -150,6 +152,6 @@ public class LinkedListDeque<T>{
         System.out.println(a.getRecursive(2));
         System.out.println(a.get(3));
         System.out.println(a.getRecursive(3));
-    }
+    }*/
 
 }
