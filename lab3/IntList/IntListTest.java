@@ -21,11 +21,15 @@ public class IntListTest {
     }
 
     @Test
-    public void testreverse(){
-
+    public void testreverse() {
+        IntList a = IntList.of(1, 2, 3, 4);
+        IntList aexpected = IntList.of(4, 3, 2, 1);
+        IntList b = new IntList(0, null);
+        IntList bexpected = new IntList(0, null);
         IntList c = null;
         IntList cexpected = null;
-
+        assertEquals(aexpected, IntList.reverse(a));
+        assertEquals(bexpected, IntList.reverse(b));
         assertEquals(cexpected, IntList.reverse(c));
     }
 
