@@ -21,6 +21,21 @@ public class IntListTest {
     }
 
     @Test
+    public void testreverse(){
+        IntList a = IntList.of(1, 2, 3, 4, 5);
+        IntList aexpected = IntList.of(5, 4, 3, 2, 1);
+        IntList b = new IntList();
+        IntList bexpected = new IntList(0, null);
+        IntList c = null;
+        IntList cexpected = null;
+        assertEquals(aexpected, IntList.reverse(a));
+        assertNotEquals(IntList.reverse(a), a);
+        assertEquals(bexpected, IntList.reverse(b));
+        assertEquals(cexpected, IntList.reverse(c));
+    }
+
+
+    @Test
     public void testdSquareList() {
         IntList L = IntList.of(1, 2, 3);
         IntList.dSquareList(L);
