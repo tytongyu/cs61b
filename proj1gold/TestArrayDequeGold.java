@@ -53,6 +53,7 @@ public class TestArrayDequeGold {
                 s.append("removeLast()\t" + expected.removeLast()+"\n");
                 assertEquals(s.toString(), expected.removeLast(), actual.removeLast());
             }
+            i++;
         }
     }
 }
