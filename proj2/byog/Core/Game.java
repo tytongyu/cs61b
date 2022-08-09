@@ -496,7 +496,7 @@ public class Game {
         return false;
     }
 
-
+    /*
     public static void main (String[] args) {
         int[][] world = new int[81][31];
         worldgenerate(world, 5);
@@ -516,5 +516,5 @@ public class Game {
         ter.renderFrame(randomTiles);
 
     }
-
+    */
 }
