@@ -31,7 +31,7 @@ public class PercolationStats {
                 simulate.open(0, l1.get(randomNum));
                 l1.remove(randomNum);
             }
-            percolationRusult[j] = simulate.numberOfOpenSites();
+            percolationRusult[j] = simulate.numberOfOpenSites() / (N * N);
             j++;
         }
     }
