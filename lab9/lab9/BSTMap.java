@@ -1,5 +1,6 @@
 package lab9;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -44,7 +45,16 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      *  or null if this map contains no mapping for the key.
      */
     private V getHelper(K key, Node p) {
-        throw new UnsupportedOperationException();
+        if (p == null) return null;
+        if (key == null) throw new IllegalArgumentException("get() with a null key");
+        int cmp = key.compareTo(p.key);
+        if (cmp == 0) {
+            return p.value;
+        } else if (cmp < 0) {
+            return getHelper(key, p.left);
+        } else {
+            return getHelper(key, p.right);
+        }
     }
 
     /** Returns the value to which the specified key is mapped, or null if this
@@ -52,14 +62,27 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      */
     @Override
     public V get(K key) {
-        throw new UnsupportedOperationException();
+        return getHelper(key, root);
     }
 
     /** Returns a BSTMap rooted in p with (KEY, VALUE) added as a key-value mapping.
       * Or if p is null, it returns a one node BSTMap containing (KEY, VALUE).
      */
     private Node putHelper(K key, V value, Node p) {
-        throw new UnsupportedOperationException();
+        if (p == null) {
+            size++;
+            return new Node(key, value);
+        }
+        if (key == null || value == null) throw new IllegalArgumentException("put() with a null");
+        int cmp = key.compareTo(p.key);
+        if (cmp == 0) {
+            p.value = value;
+        } else if (cmp < 0) {
+            p.left = putHelper(key, value, p.left);
+        } else {
+            p.right = putHelper(key, value, p.right);
+        }
+        return p;
     }
 
     /** Inserts the key KEY
@@ -67,13 +90,13 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      */
     @Override
     public void put(K key, V value) {
-        throw new UnsupportedOperationException();
+        root = putHelper(key, value, root);
     }
 
     /* Returns the number of key-value mappings in this map. */
     @Override
     public int size() {
-        throw new UnsupportedOperationException();
+        return size;
     }
 
     //////////////// EVERYTHING BELOW THIS LINE IS OPTIONAL ////////////////
@@ -81,7 +104,18 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     /* Returns a Set view of the keys contained in this map. */
     @Override
     public Set<K> keySet() {
-        throw new UnsupportedOperationException();
+        return keySetHelper(root);
+    }
+
+    public Set<K> keySetHelper(Node p) {
+        Set<K> KeySet = new HashSet<>();
+        if (p == null) {
+            return null;
+        }
+        KeySet.add(p.key);
+        KeySet.addAll(keySetHelper(p.left));
+        KeySet.addAll(keySetHelper(p.right));
+        return KeySet;
     }
 
     /** Removes KEY from the tree if present
@@ -90,7 +124,25 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      */
     @Override
     public V remove(K key) {
-        throw new UnsupportedOperationException();
+        return removeHelper(key, root);
+    }
+
+    public V removeHelper(K key, Node p) {
+        if (p == null) {
+            return null;
+        }
+        if (key == null) throw new IllegalArgumentException("remove() with a null");
+        int cmp = key.compareTo(p.key);
+        V removeValue;
+        if (cmp == 0) {
+            removeValue = p.value;
+            p.value =null;
+            return removeValue;
+        } else if (cmp < 0) {
+            return removeHelper(key, p.left);
+        } else {
+            return removeHelper(key, p.right);
+        }
     }
 
     /** Removes the key-value entry for the specified key only if it is
@@ -99,7 +151,26 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      **/
     @Override
     public V remove(K key, V value) {
-        throw new UnsupportedOperationException();
+        return removeHelper(key, value, root);
+    }
+
+    public V removeHelper(K key, V value, Node p) {
+        if (p == null) {
+            return null;
+        }
+        if (key == null) throw new IllegalArgumentException("remove() with a null");
+        int cmp = key.compareTo(p.key);
+        V removeValue;
+        if (cmp == 0 && get(key) == value) {
+            removeValue = p.value;
+            p.value =null;
+            return removeValue;
+        } else if (cmp < 0) {
+            return removeHelper(key, p.left);
+        } else if (cmp > 0){
+            return removeHelper(key, p.right);
+        }
+        return null;
     }
 
     @Override
