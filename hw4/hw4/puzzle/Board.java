@@ -1,10 +1,9 @@
 package hw4.puzzle;
 
 import java.util.ArrayDeque;
-import java.util.Arrays;
 import java.util.Queue;
 
-public class Board implements WorldState{
+public class Board implements WorldState {
     private int N;
     private int[][] grids;
 
@@ -18,7 +17,7 @@ public class Board implements WorldState{
         }
     }
 
-    int[] goal() {
+    private int[] goal() {
         int[] goal = new int[N * N];
         for (int i = 0; i < N * N - 1; i++) {
             goal[i] = i + 1;
@@ -80,9 +79,10 @@ public class Board implements WorldState{
             for (int j = 0; j < N; j++) {
                 if (grids[i][j] == 0) {
                     continue;
-                }else {
-                    if (grids[i][j] != goalGrid[N * i + j])
+                } else {
+                    if (grids[i][j] != goalGrid[N * i + j]) {
                         hammingDis++;
+                    }
                 }
             }
         }
@@ -95,8 +95,8 @@ public class Board implements WorldState{
             for (int j = 0; j < N; j++) {
                 if (grids[i][j] == 0) {
                     continue;
-                }else {
-                    manhattanDis += Math.abs((grids[i][j]-1) / N - i) + Math.abs((grids[i][j]-1) % N - j);
+                } else {
+                    manhattanDis += Math.abs((grids[i][j] - 1) / N - i) + Math.abs((grids[i][j] - 1) % N - j);
                 }
             }
         }
@@ -116,21 +116,36 @@ public class Board implements WorldState{
         }
         Board yy = (Board) y;
 
-        return N == yy.N && grids.equals(yy.grids);
+        if (N != yy.N) {
+            return false;
+        }
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                if (grids[i][j] != yy.grids[i][j]) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public String toString() {
         StringBuilder s = new StringBuilder();
-        int N = size();
-        s.append(N + "\n");
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                s.append(String.format("%2d ", tileAt(i,j)));
+        int a = size();
+        s.append(a + "\n");
+        for (int i = 0; i < a; i++) {
+            for (int j = 0; j < a; j++) {
+                s.append(String.format("%2d ", tileAt(i, j)));
             }
             s.append("\n");
         }
         s.append("\n");
         return s.toString();
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 
 }

@@ -1,33 +1,33 @@
 package hw4.puzzle;
 
 import edu.princeton.cs.algs4.MinPQ;
-import edu.princeton.cs.algs4.Queue;
 
 import java.util.*;
 
+
 public class Solver {
-    int times;
-    List ListSolution = new ArrayList<>();
+    private int times;
+    private List listSolution = new ArrayList<>();
 
 
-    private class searchNode implements Comparable{
+    private class SearchNode implements Comparable {
         private WorldState world;
         private int movesNum;
-        private searchNode previous;
+        private SearchNode previous;
 
         @Override
-        public int compareTo (Object o) {
-            searchNode p = (searchNode)o;
+        public int compareTo(Object o) {
+            SearchNode p = (SearchNode) o;
             return movesNum + getEdtg(this) - getEdtg(p) - p.movesNum;
         }
 
-        public searchNode (WorldState a, int b, searchNode c) {
+        public SearchNode(WorldState a, int b, SearchNode c) {
             world = a;
             movesNum = b;
             previous = c;
         }
 
-        private int getEdtg(searchNode sn) {
+        private int getEdtg(SearchNode sn) {
             if (!edtgCaches.containsKey(sn.world)) {
                 edtgCaches.put(sn.world, sn.world.estimatedDistanceToGoal());
             }
@@ -39,19 +39,22 @@ public class Solver {
     private Map<WorldState, Integer> edtgCaches = new HashMap<>();
 
     public Solver(WorldState initial) {
-        searchNode initialNode = new searchNode(initial, 0, null);
-        MinPQ<searchNode> a = new MinPQ<searchNode>();
+        SearchNode initialNode = new SearchNode(initial, 0, null);
+        MinPQ<SearchNode> a = new MinPQ<SearchNode>();
         a.insert(initialNode);
-        searchNode cur = null;
+        SearchNode cur = null;
         while (!a.isEmpty()) {
-            cur = (searchNode)a.delMin();
-            if (cur.world.isGoal()) break;
+            cur = (SearchNode) a.delMin();
+            if (cur.world.isGoal()) {
+                break;
+            }
             for (WorldState x : cur.world.neighbors()) {
                 if (cur.previous == null) {
-                    a.insert(new searchNode(x, cur.movesNum + 1, cur));
+                    a.insert(new SearchNode(x, cur.movesNum + 1, cur));
                 } else {
-                    if (!x.equals(cur.previous.world))
-                        a.insert(new searchNode(x, cur.movesNum + 1, cur));
+                    if (!x.equals(cur.previous.world)) {
+                        a.insert(new SearchNode(x, cur.movesNum + 1, cur));
+                    }
                 }
             }
         }
@@ -62,13 +65,13 @@ public class Solver {
             cur = cur.previous;
         }
         while (!reverse.isEmpty()) {
-            ListSolution.add(reverse.pop());
+            listSolution.add(reverse.pop());
         }
     }
     public int moves() {
         return times;
     }
     public Iterable<WorldState> solution() {
-        return ListSolution;
+        return listSolution;
     }
 }

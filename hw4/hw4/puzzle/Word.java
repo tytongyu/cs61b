@@ -100,9 +100,7 @@ public class Word implements WorldState {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-
         Word word1 = (Word) o;
-
         if (word != null ? !word.equals(word1.word) : word1.word != null) {
             return false;
         }
