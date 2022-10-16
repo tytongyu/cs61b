@@ -1,5 +1,4 @@
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,7 +24,42 @@ public class Router {
      */
     public static List<Long> shortestPath(GraphDB g, double stlon, double stlat,
                                           double destlon, double destlat) {
-        return null; // FIXME
+        GraphDB.Node startNode = g.getNode(g.closest(stlon, stlat));
+        Long endNodeId = g.closest(destlon, destlat);
+        for (GraphDB.Node x : g.nodeSet.values()) {
+            x.distTo = Integer.MAX_VALUE;
+        }
+        startNode.distTo = 0;
+        startNode.priority = GraphDB.distance(startNode.lon, startNode.lat, destlon, destlat);
+        PriorityQueue<GraphDB.Node> nodeSet = new PriorityQueue<>();
+        nodeSet.add(startNode);
+        while (!nodeSet.isEmpty()) {
+            GraphDB.Node cur = nodeSet.poll();
+            if (cur.nodeID.equals(endNodeId)) {
+                break;
+            }
+            for (GraphDB.Node x : cur.adjacent) {
+                if (x.distTo > cur.distTo + GraphDB.distance(x.lon, x.lat, cur.lon, cur.lat)) {
+                    x.distTo = cur.distTo + GraphDB.distance(x.lon, x.lat, cur.lon, cur.lat);
+                    x.priority = x.distTo + GraphDB.distance(x.lon, x.lat, destlon, destlat);
+                    x.prve = cur;
+                    nodeSet.add(x);
+                }
+            }
+        }
+        Stack<Long> a = new Stack<>();
+        GraphDB.Node cur = g.getNode(endNodeId);
+        while (cur != startNode) {
+            a.add(cur.nodeID);
+            cur = cur.prve;
+        }
+        a.add(cur.nodeID);
+
+        List<Long> res = new ArrayList<>();
+        while(!a.isEmpty()) {
+            res.add(a.pop());
+        }
+        return res;
     }
 
     /**
@@ -37,7 +71,41 @@ public class Router {
      * route.
      */
     public static List<NavigationDirection> routeDirections(GraphDB g, List<Long> route) {
-        return null; // FIXME
+        List<NavigationDirection> routeDirections = new ArrayList<>();
+        for (int i = 0; i < route.size(); i++) {
+            routeDirections.add(aTob(g, route.get(i), route.get(i + 1)));
+        }
+        routeDirections.get(0).direction = 0;
+        return routeDirections;
+    }
+
+    private static NavigationDirection aTob(GraphDB g, Long a, Long b) {
+        NavigationDirection aTob = new NavigationDirection();
+        String wayName = "";
+        for (Long x : g.getNode(b).edgeID) {
+            if (g.getNode(a).edgeID.contains(x)) {
+                wayName = g.getEdge(a).name;
+            }
+        }
+        aTob.way = wayName;
+        aTob.distance = g.distance(a, b);
+        double angle = g.bearing(a, b);
+        if (Math.abs(angle) <= 15) {
+            aTob.direction = 1;
+        } else if (Math.abs(angle) <= 30 && angle < 0) {
+            aTob.direction = 2;
+        } else if (Math.abs(angle) <= 30 && angle > 0) {
+            aTob.direction = 3;
+        } else if (Math.abs(angle) <= 100 && angle < 0) {
+            aTob.direction = 5;
+        } else if (Math.abs(angle) <= 100 && angle > 0) {
+            aTob.direction = 4;
+        } else if (angle < 0) {
+            aTob.direction = 6;
+        } else {
+            aTob.direction = 7;
+        }
+        return aTob;
     }
 
 
