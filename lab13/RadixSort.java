@@ -1,3 +1,7 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Class for doing Radix sort
  *
@@ -16,8 +20,19 @@ public class RadixSort {
      * @return String[] the sorted array
      */
     public static String[] sort(String[] asciis) {
-        // TODO: Implement LSD Sort
-        return null;
+        int maxIndex = 0;
+        for (String x : asciis) {
+            maxIndex = maxIndex > x.length() - 1 ? maxIndex : x.length() - 1;
+        }
+        String[] res = new String[asciis.length];
+        for (int i = 0; i < asciis.length; i++) {
+            res[i] = asciis[i];
+        }
+        while (maxIndex >= 0) {
+            sortHelperLSD(res, maxIndex);
+            maxIndex--;
+        }
+        return res;
     }
 
     /**
@@ -27,7 +42,37 @@ public class RadixSort {
      * @param index The position to sort the Strings on.
      */
     private static void sortHelperLSD(String[] asciis, int index) {
-        // Optional LSD helper method for required LSD radix sort
+        int[] asciiArr = new int[257];
+        String[] res = new String[asciis.length];
+        for (String x : asciis) {
+            if (x.length() < index + 1) {
+                asciiArr[0]++;
+            } else {
+                int pos = x.charAt(index) + 1;
+                asciiArr[x.charAt(index) + 1]++;
+            }
+        }
+
+        int pos = 0;
+        for (int i = 0; i < asciiArr.length; i++) {
+            int temp = asciiArr[i];
+            asciiArr[i] = pos;
+            pos += temp;
+        }
+
+        for (String x : asciis) {
+            if (x.length() < index + 1) {
+                res[asciiArr[0]] = x;
+                asciiArr[0]++;
+            } else {
+                res[asciiArr[x.charAt(index) + 1]] = x;
+                asciiArr[x.charAt(index) + 1]++;
+            }
+        }
+
+        for (int i = 0; i < res.length; i++) {
+            asciis[i] = res[i];
+        }
         return;
     }
 
@@ -41,8 +86,13 @@ public class RadixSort {
      * @param index the index of the character the method is currently sorting on
      *
      **/
+
+
     private static void sortHelperMSD(String[] asciis, int start, int end, int index) {
         // Optional MSD helper method for optional MSD radix sort
         return;
     }
+
+
+
 }
