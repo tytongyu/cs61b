@@ -13,7 +13,7 @@ public class SeamCarver {
     }
 
     public Picture picture() {
-        return this.picture;
+        return new Picture(picture);
     }
 
     public int width() {
@@ -85,7 +85,7 @@ public class SeamCarver {
         int shortestPath = paths[bottomx][height - 1];
         int[] res = new int[height];
         res[height - 1] = bottomx;
-        for (int i = height -2; i > -1; i--) {
+        for (int i = height - 2; i > -1; i--) {
             shortestPath -= energy(bottomx, i + 1);
             if (bottomx - 1 >= 0) {
                 if (paths[bottomx - 1][i] == shortestPath) {
